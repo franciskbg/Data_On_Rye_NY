@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    	<!-- 
+    	Boxer Template
+    	http://www.templatemo.com/tm-446-boxer
+    	-->
+		<meta charset="utf-8">
+		<title>NY Restaurant Health Ratings</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		
+		<!--BEGIN styles needed for the Boxer bootstrap template-->
+		<!-- animate css -->
+		<link rel="stylesheet" href="static/css/animate.min.css">
+		<!-- bootstrap css -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<!-- font-awesome -->
+		<link rel="stylesheet" href="static/css/font-awesome.min.css">
+		<!-- google font -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'>
+		<!--END styles needed for the Boxer bootstrap template-->
+
+		<!--BEGIN styles needed for leaflet-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+		<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<!--END styles needed for leaflet-->
+
+		<!--D3 library begins-->
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+			<!--D3 library Ends-->
+	
+		<!--  BEGIN Styles used by the Resizeable Control 
+		<link rel="stylesheet" href="static/css/jquery.jscrollpane.css" />
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css">
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.css">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css" />
+    	<link rel="stylesheet" href="static/css/Leaflet.ResizableControl.css" />
+		END Styles used by the Resizeable Control-->
+
+		<!-- custom css -->
+		<link rel="stylesheet" href="static/css/templatemo-style.css">
+
+	</head>
+	<body>
+		<!-- start preloader -->
+		<div class="preloader">
+			<div class="sk-spinner sk-spinner-rotating-plane"></div>
+    	 </div>
+		<!-- end preloader -->
+
+		<!-- Start of navbar -->
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="container-fluid navbar-custom">
+		  
+				  <!-- Per Jing, grouping for better mobile display -->
+				  <div class="row">
+					<div class="navbar-header">
+					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle Navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					  </button>
+					  <a href="index.html" class="navbar-brand">NYC Restaurant Sanitation Scores</a>
+					</div>
+
+				<!--   LG Note:    Category changes to the original
+					home ->  Maps
+					pricing ->   Data
+					download ->  Overview
+					contact ->   About
+
+				-->
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right text-uppercase">
+						<li class="dropdown" >
+							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Maps <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#mapM">Map1-Markers</a></li>
+								 <li><a href="#mapH">Map2-Heat</a></li>
+								 <li ><a href="#mapG">Graph</a></li>
+							</ul>
+						</li>
+						<!-- <li><a href="#feature">Features</a></li> -->
+						<!--   Removed features from the menu, but mainted the section within the page-->
+						<li><a href="#overview">Overview</a></li>
+						<li><a href="#about">About</a></li>
+						<!--  Moving data to the end as I'm not sure how long it will be.-->
+						<!--??  this link should open a new page.  Only works when I choose 'new tab'.   Will get this working.-->
+						<!-- <li><a href="data.html" target="_self">Data</a></li> -->
+						<li class="navbar-last"><a href="data.html">Data</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- end navigation -->
+
+		<!-- start mapM, Map with Markers -->
+		<section id="mapG">  <!--This id is for the style sheets and makes the section look correct.  In this case, mapG and mapM have the same style in the CSS.-->
+				<div class="overlay">
+						<div class="container"><!--may need to add container-fluid for responsive to display the map height-->
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-10 wow fadeIn" id="mapM" style="height:600px;" data-wow-delay="0.3s"></div>  <!--this id is for the map id in the js file-->
+								<div class="col-md-1"></div>
+							</div>
+						</div>
+				</div>
+		</section>
+		<!-- end mapM, Map with Markers -->
+
+	<!-- start mapH, Heat Map -->
+	<section id="mapH">
+		<div class="overlay">
+				<div class="container"> <!--may need to add container-fluid for responsive to display the map height-->
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10 wow fadeIn" id="h_map" style="height:600px;" data-wow-delay="0.3s"></div>
+						<div class="col-md-1"></div>
+					</div>
+				</div>
+		</div>
+	</section>
+<!-- end mapH, Heat Map -->	
+
+<!-- start mapH, Graph Map -->
+<section id="mapG">
+		<div class="overlay">
+				<div class="container"> <!--may need to add container-fluid for responsive to display the map height-->
+					<div class="row">
+						<div class="col-md-1">
+						</div>
+						<!--  This line has been removed for demo purposes.   Update the id attribute with the value in the js file.-->
+						<!-- <div class="col-md-10 wow fadeIn" id="map-id" style="height:600px;" data-wow-delay="0.3s"> -->
+						<!--The image is added only for demo purposes.    Remove this DIV SECTION when the real map is ready-->
+							<div class="col-md-10 wow fadeInRight" data-wow-delay="0.6s">
+									
+									<style> 
+											body {
+												font: 40px sans-serif;
+											}
+											.axis path,
+											.axis line {
+												fill: none;
+												stroke: #000;
+												shape-rendering: crispEdges;
+											}
+											.bar {
+												fill: rgb(186, 114, 195);
+											}
+											.bar:hover {
+												fill: rgb(6, 160, 160) ;
+											}
+											.x.axis path {
+												display: none;
+											}
+											 
+											</style>
+													
+										
+											
+											<!-- <script src="https://d3js.org/d3.v4.min.js"></script>
+											<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+											<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+										 -->
+											
+											
+											
+											 <!-- Create a div where the graph will take place -->
+											<!-- <div id="my_dataviz"></div> -->
+											
+											<script>
+											// set the dimensions and margins of the graph
+											var margin = {top: 20, right: 20, bottom: 30, left: 40},
+													width = 960 - margin.left - margin.right,
+													height = 500 - margin.top - margin.bottom;
+											// set the ranges
+													
+													//NOTE: .rangeRounBands is for D3 V3, .scaleBand() is for D3 V4
+											var x = d3.scaleBand()
+																.rangeRound([0, width])
+																.padding(0.1);
+											// NOTE: scaleLinear() is the option to use for D3 v4 and 5
+												 //scale.linear() is for D3 V3
+											// set the ranges
+											var y = d3.scaleLinear()
+															.range([height, 0]);
+											 
+											// var xAxis = d3.svg.axis()
+											//     .scale(x)
+											//      .orient("bottom");
+											var yAxis = d3.axisLeft();
+											// append the svg object to the body of the page
+											// append a 'group' element to 'svg'
+											// moves the 'group' element to the top left margin
+											var svg = d3.select("body").append("svg")
+													.attr("width", width + margin.left + margin.right)
+													.attr("height", height + margin.top + margin.bottom)
+												.append("g")
+													.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+																// get the data
+											d3.csv("Violation_bar_chart.csv", function(error, data) {
+												if (error) throw error;
+												// // format the data
+											 data.forEach(function(d) {
+												 d.critical_flag_num = +d.critical_flag_num;
+												});
+												
+												// Scale the range of the data in the domains
+												x.domain(data.map(function(d) { return d.critical_flag; }));
+												y.domain([0, d3.max(data, function(d) { return d.critical_flag_num; })]);
+											 
+											// add the y Axis
+														//NEEDS TO BE BELOW X.DOMAIN AND Y.DOMAIN TO SHOW THE RIGHT AXIS UNITS
+											svg.append("g")
+												.attr("class", "yaxis")
+												.call(d3.axisLeft(y).ticks(7))
+												.append("text")
+												.attr("transform", "rotate(-90)")
+												.attr("y",6)
+												.attr("dy", ".71em")
+												.style ("text-anchor", "end")
+												.text("Frequency");
+												// add the x Axis
+											 svg.append("g")
+														.attr("transform", "translate(0," + height + ")")
+														.call(d3.axisBottom(x));
+												 
+											//  svg.append("g")
+											//       .attr("class", "y axis")
+											//       .call(yAxis)
+											//     .append("text")
+											//       .attr("transform", "rotate(-90)")
+											//       .attr("y", 6)
+											//       .attr("dy", ".71em")
+											//       .style("text-anchor", "end")
+											//       .text("Frequency");
+														
+											// append the rectangles for the bar chart
+											svg.selectAll(".bar")
+														.data(data)
+													.enter().append("rect")
+														.attr("class", "bar")
+														.attr("x", function(d) { return x(d.critical_flag); })
+														.attr("width", x.bandwidth())
+														.attr("y", function(d) { return y(d.critical_flag_num); })
+														.attr("height", function(d) { return height - y(d.critical_flag_num);  })
+														.attr("font-size", "34px")
+													});
+													//   .on('mouseover', tip.show)
+													//   .on('mouseout', tip.hide)
+												
+												// add the y Axis
+												var tip = d3.tip()
+												.attr('class', 'd3-tip')
+												.offset([-10, 0])
+												.html(function(d) {
+													return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+												})
+												svg.call(tip);
+												 
+												function type(d) {
+												d.frequency = +d.frequency;
+												return d;
+											}
+											 
+											</script>
+
+								<!-- <img src="static/images/exampleBar.png" class="img-responsive" alt="Graph Example"> -->
+							</div>
+						<div class="col-md-1">
+						</div>
+					</div>
+				</div>
+		</div>
+	</section>
+<!-- end mapG, Graph Map -->	
+
+		<!-- start overview -->
+		<section id="overview">
+			<div class="container">
+				<div class="row">
+					<!-- row1-->
+					<div class="col-md-12 wow fadeInLeft" data-wow-delay="0.6s">
+								<h2 class="text-uppercase">Project Overview</h2>
+							</div>
+					<!-- row2-->
+					<!-- <div class="col-md-1"></div> -->
+					<div class="col-md-12 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/processExample.png" class="img-responsive" alt="processOverview">
+						</div>
+					<!-- <div class="col-md-1"></div> -->
+					</div>
+					<!-- row3-->
+					<div class="col-md-8 wow fadeInLeft" data-wow-delay="0.6s">
+						<p></p>
+						<h3>Our Process</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+						<p></p>
+					</div>
+					<div class="col-md-1"> </div>
+					<div class="col-md-3 wow fadeInLeft" data-wow-delay="0.6s"></div>
+						<h3>Technologies Used</h3>
+						<UL>
+							<li>What should we add here?</li>
+							<li>Sqlite</li>
+							<li>Python</li>
+							<li>Flask</li>
+							<li>Java-Script</li>
+
+						</UL>
+					</div>	
+			</div>
+		</section>
+		<!-- end overview -->
+
+		<!-- start feature -->
+		<!-- This section is maintained for content purposed, but has been removed from the menu-->
+		<section id="feature">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">Libraries</h2>
+							<p>The following libraries were used with this project:  lg:  need to determine what to list ?? </p>
+							<p><i class="fa fa-mobile"></i>Leaflet</p>
+							<p><i class="fa fa-mobile"></i>Pandas</p>
+							<p><i class="fa fa-mobile"></i>D3</p>
+						</div>
+						<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/computerGear.png" class="img-responsive" alt="feature img">
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- end feature -->
+	
+			<!-- start feature1 -->
+			<section id="feature1">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<img src="static/images/nycOpenData.png" class="img-responsive" alt="feature img">
+						</div>
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">Data Source</h2>
+							<p>The dataset is provided by the the New York City Department of Health and Mental Hygiene (DOHMH) .   The data includes restaurant inspections, violations, grades and adjudication information for restaurants within the five boroughs of NYC.  
+									 </p>
+									 <p></p>
+							<p><span><i class="fa fa-mobile"></i></span><a href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j;" target="_blank">Link to Website</a></p>
+							<p><i class="fa fa-code"></i>lg need another bullet ??</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- end feature1 -->
+
+		<!-- start about -->
+		<section id="about">
+			<div class="overlayBottom">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">About Us</h2>
+							<p>We are a team from Atlanta, Georgia, who are enrolled in the GA Tech Data Science & Analytics Bootcamp.  Our team project was to build a website which engaged the user to explore the dataset.    Collectively, we have 63 years of experience in data analysis, SQL database management, and product management. </p>
+							<p>Where did our name come from?    As we sat in class and talked about all the foods we love to eat in New York, someone said "pastrami on rye" which then led to us laughing about this project being "data on rye" </p>
+							<address></address>
+								<p><i class="fa fa-map-marker"></i> Atlanta, Georgia, United States</p>
+								<!-- <p><i class="fa fa-phone"></i> 010-010-0110 or 020-020-0220</p>
+								<p><i class="fa fa-envelope-o"></i> info@company.com</p> -->
+							</address>
+						</div>
+						<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/pastrami.jpg" class="img-responsive" alt="feature img">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end about -->
+
+		
+		<!-- lg ??  moving this sectino to a new page since I think it is too much data for a DIV.   Links only work if I right click and open in a new tab.  Will figure this out.-->
+		<!-- start data
+		<section id="data">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12 wow bounceIn">
+							<h2 class="text-uppercase">Our Data</h2>
+						</div>
+						<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+							<div class="data text-uppercase">
+								<div class="data-title">
+									<h4>Basic Plan</h4>
+									<p>$11</p>
+									<small class="text-lowercase">monthly</small>
+								</div>
+								<ul>
+									<li>6 GB Space</li>
+									<li>600 GB Bandwidth</li>
+									<li>60 More Themes</li>
+									<li>Lifetime Support</li>
+								</ul>
+								<button class="btn btn-primary text-uppercase">Sign up</button>
+							</div>
+						</div>
+						<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+							<div class="data active text-uppercase">
+								<div class="data-title">
+									<h4>Business Plan</h4>
+									<p>$22</p>
+									<small class="text-lowercase">monthly</small>
+								</div>
+								<ul>
+									<li>15 GB space</li>
+									<li>1,500 GB Bandwidth</li>
+									<li>150 More Themes</li>
+									<li>Lifetime Support</li>
+								</ul>
+								<button class="btn btn-primary text-uppercase">Sign up</button>
+							</div>
+						</div>
+						<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+							<div class="data text-uppercase">
+								<div class="data-title">
+									<h4>Pro Plan</h4>
+									<p>$33</p>
+									<small class="text-lowercase">monthly</small>
+								</div>
+								<ul>
+									<li>35 GB space</li>
+									<li>3,500 GB bandwidth</li>
+									<li>350 more themes</li>
+									<li>Lifetime Support</li>
+								</ul>
+								<button class="btn btn-primary text-uppercase">Sign Up</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			end data -->
+
+		<!-- start footer -->
+		<footer>
+			<div class="container">
+				<div class="row">
+					<p>Copyright © 2019 Bootcamp Project #2</p>
+				</div>
+			</div>
+		</footer>
+		<!-- end footer -->
+		
+		<!-- API key -->
+		<script type="text/javascript" src="static/js/config.js"></script>
+
+		<!-- jQuery CDN -->
+		<!-- This URL for the jquery script is from the HTML homework.  Using this file and NOT the jquery.js which came with the bootstrap template
+		WHY??    2.1.4 was used with HTML Homework and v1.10.2 was included with bootstrap template -->
+		  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+
+		<!--This script came with the bootstap template and is v1.10.2-->
+		<!-- <script src="js/jquery.js"></script>  -->
+		<script src="static/js/jquery.singlePageNav.min.js"></script>
+
+
+		<!--   bootstrap should be loaded AFTER jquery, else there is an error-->
+		<!--https://stackoverflow.com/questions/9529574/bootstrap-dropdown-menu-not-working-->
+
+		
+		<!-- Bootstrap CDN -->
+		<!-- <script src="js/bootstrap.min.js"></script> -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+		<script src="static/js/wow.min.js"></script>
+		
+		<script src="static/js/custom.js"></script>
+
+		
+		<!--  BEGIN Scripts used by Heat Map-->
+		<script type="text/javascript" src="static/js/heatmap.js"></script>
+		<script type="text/javascript" src="static/js/leaflet-heat.js"></script>
+		<!-- END Scripts used by the Heat Map-->
+        
+        <!--  BEGIN Scripts used by Marker Map-->
+        <script type="text/javascript" src="static/js/FarahMarkers.js"></script>
+        <!-- END Scripts used by the Marker Map-->
+        
+		<!--  BEGIN Scripts used by the Resizeable Control-->
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.js"></script>
+    	<script src="static/js/jquery.jscrollpane.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.js"></script>
+    	<script src="static/js/Leaflet.ResizableControl.js"></script>
+		 END Scripts used by the Resizeable Control-->
+
+	  
+	</body>
+</html>

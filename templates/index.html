@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    	<!-- 
+    	Boxer Template
+    	http://www.templatemo.com/tm-446-boxer
+    	-->
+		<meta charset="utf-8">
+		<title>NY Restaurant Health Ratings</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		
+		<!--BEGIN styles needed for the Boxer bootstrap template-->
+		<!-- animate css -->
+		<link rel="stylesheet" href="static/css/animate.min.css">
+		<!-- bootstrap css -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<!-- font-awesome -->
+		<link rel="stylesheet" href="static/css/font-awesome.min.css">
+		<!-- google font -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'>
+		<!--END styles needed for the Boxer bootstrap template-->
+
+		<!--BEGIN styles needed for leaflet-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+		<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+        <link rel="stylesheet" href="static/css/leaflet.extra-markers.min.css">
+		<!--END styles needed for leaflet-->
+
+		<!-- custom css -->
+		<link rel="stylesheet" href="static/css/templatemo-style.css">
+
+		<!-- Frappe Ingredients-->
+		<link rel="stylesheet" href="https://unpkg.com/frappe-datatable@0.0.5/dist/frappe-datatable.min.css">
+		<script src="https://unpkg.com/sortablejs@1.7.0/Sortable.min.js"></script>
+		<script src="https://unpkg.com/clusterize.js@0.18.0/clusterize.min.js"></script>
+		<!-- include the lib -->
+		<script src="https://unpkg.com/frappe-datatable@0.0.5/dist/frappe-datatable.min.js"></script>
+
+	</head>
+	<body>
+		<!-- start preloader -->
+		<div class="preloader">
+			<div class="sk-spinner sk-spinner-rotating-plane"></div>
+    	 </div>
+		<!-- end preloader -->
+
+		<!-- Start of navbar -->
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="container-fluid navbar-custom">
+		  
+				  <!-- Per Jing, grouping for better mobile display -->
+				  <div class="row">
+					<div class="navbar-header">
+					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle Navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					  </button>
+					  <a href="index.html" class="navbar-brand">NYC Restaurant Sanitation Scores</a>
+					</div>
+
+				<!--   LG Note:    Category changes to the original
+					home ->  Maps
+					pricing ->   Data
+					download ->  Overview
+					contact ->   About
+
+				-->
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right text-uppercase">
+						<li class="dropdown" >
+							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Maps <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#mapM">Restaurants</a></li>
+								 <li><a href="#mapH">Citations</a></li>
+								 <li ><a href="#mapG">Severity</a></li>
+							</ul>
+						</li>
+						<!-- <li><a href="#feature">Features</a></li> -->
+						<!--   Removed features from the menu, but mainted the section within the page-->
+						<li><a href="#overview">Overview</a></li>
+						<li><a href="#about">About</a></li>
+						<li class="navbar-last"><a href="data.html">Data</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- end navigation -->
+
+		<!-- begin NYC Violations intro header -->
+		<section>
+			<div class="container">
+			<div class="row"><h1></h1></div>
+			<div class="row"><h1></h1></div>
+	
+			<div class="row">
+		
+		<div class="col-md-6">
+		<iframe src="https://giphy.com/embed/xT9DPyXuYqhFtmdTFu" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/nyc-new-york-lady-liberty-xT9DPyXuYqhFtmdTFu">via GIPHY</a></p>
+		</div>
+		
+		  <div class="col-md-6">
+		  <h1></h1><br>
+			<h1>Welcome to New York!</h1>
+			<h2>We have so many restaurants to choose from! Before you grab that taxi or hop on the train, be sure to explore our site on information about New York City Restaurant Sanitation Scores!<h2>
+			</div>
+			
+			</div>
+			</div>
+			
+			</div>
+			</section>
+
+		<!-- end NYC Violations intro header -->
+
+		<!-- start mapM, Map with Markers -->
+		<section id="mapM">  <!--This id is for the style sheets and makes the section look correct.  In this case, mapG and mapM have the same style in the CSS.-->
+				<div class="overlay">
+						<div class="container"><!--may need to add container-fluid for responsive to display the map height-->
+							<div class="row">
+<!--                                <div class="col-md-1"></div>-->
+								<div class="col-md-12 wow fadeIn" id="FarahM" style="height:600px;" data-wow-delay="0.3s"></div>  <!--this id is for the map id in the js file-->
+<!--                                <div class="col-md-1"></div>-->
+							</div>
+						</div>
+				</div>
+		</section>
+		<!-- end mapM, Map with Markers -->
+
+	<!-- start mapH, Heat Map -->
+	<section id="mapH">
+		<div class="overlay">
+				<div class="container"> <!--may need to add container-fluid for responsive to display the map height-->
+					<div class="row">
+						<!-- <div class="col-md-1"></div> -->
+						<div class="col-md-12 wow fadeIn" id="h_map" style="height:600px;" data-wow-delay="0.3s"></div>
+						<!-- <div class="col-md-1"></div> -->
+					</div>
+				</div>
+		</div>
+	</section>
+<!-- end mapH, Heat Map -->	
+
+<!-- start mapH, Graph Map -->
+<section id="mapG">
+		<div class="overlay">
+				<div class="container"> <!--may need to add container-fluid for responsive to display the map height-->
+					<div class="row">
+						<div class="col-md-1">
+						</div>
+						<!--  This line has been removed for demo purposes.   Update the id attribute with the value in the js file.-->
+						<!-- <div class="col-md-10 wow fadeIn" id="graphId" style="height:600px;" data-wow-delay="0.3s"> -->
+						<!--The image is added only for demo purposes.    Remove this DIV SECTION when the real map is ready-->
+							<div class="col-md-10 wow fadeInRight" data-wow-delay="0.6s">
+								<img src="static/images/exampleBar.png" class="img-responsive" alt="Graph Example">
+							</div>
+						<div class="col-md-1">
+						</div>
+					</div>
+				</div>
+		</div>
+	</section>
+<!-- end mapG, Graph Map -->
+
+		<!-- start overview -->
+		<section id="overview">
+			<div class="container">
+				<div class="row">
+					<!-- row1-->
+					<div class="col-md-12 wow fadeInLeft" data-wow-delay="0.6s">
+								<h2 class="text-uppercase">Project Overview</h2>
+					</div>
+					<!-- row2-->
+					<div class="col-md-12 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/devProcess.png" class="img-responsive" alt="processOverview">
+					</div>
+					</div>
+					<!-- row3-->
+					<div class="col-md-7 wow fadeInLeft" data-wow-delay="0.6s">
+						<p></p>
+						<h3>Our Process</h3>
+						<p>Our team of 5 people each had a role, from data selection through final deployment.     After choosing the dataset, the ETL process was underway to have clean data for the website.   An immediate challenge was the data had restaurant addresses, but not coordinates for mapping.   Via API calls, the coordiantes were obtained and the joined with the restaurant data.   In parallel to the ETL process, a bootstrap template was selected and customized for our site.   Team members then began creating the visuals.   The most chanllenging part was merging the JavaScrip and CSS for all visuals.   Finally, we deployed to the web.</p>
+						<p></p>
+					</div>
+					<div class="col-md-2"><p></p> </div>
+					<div class="col-md-3 wow fadeInLeft" data-wow-delay="0.6s"></div>
+						<div class="indentSection">
+						<h3>Technologies Used</h3>
+							<UL>
+								<li>HTML 5.0/CSS</li>
+								<li>SQL</li>
+								<li>Python</li>
+								<li>API calls</li>
+								<li>Java-Script</li>
+								<li>Heroku</li>
+							</UL>
+						</div>
+				</div>	
+			</div>
+		</section>
+		<!-- end overview -->
+
+		<!-- overview2 -->
+		<section id="overview2">
+			<div class="container">
+				<div class="row">
+					<!-- row2-->
+					<!-- <div class="col-md-1"></div> -->
+					<div class="col-md-12 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/dataRetrieval.png" class="img-responsive" alt="Data Retrieval">
+					</div>
+					<!-- <div class="col-md-1"></div> -->
+				</div>
+		</div>
+		</section>
+		<!-- end overview2 -->
+
+		<!-- start feature -->
+		<!-- This section is maintained for content purposes, but has been removed from the menu-->
+		<section id="feature">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">Libraries</h2>
+							<p>The following libraries were used with this project:</p>
+							<UL>
+								<li>Leaflet</li>
+								<li>Pandas</li>
+								<li>D3</li>
+								<li>Flask</li>
+								<li>Frappe</li>
+								<li>GeoJSON</li>
+							</UL>
+						</div>
+						<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/computerGear.png" class="img-responsive" alt="feature img">
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- end feature -->
+	
+			<!-- start feature1 -->
+			<section id="feature1">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<img src="static/images/nycOpenData.png" class="img-responsive" alt="feature img">
+						</div>
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">Data Sources</h2>
+							<p>The restaurant inspection dataset is provided by the the New York City Department of Health and Mental Hygiene (DOHMH).   The data includes restaurant inspections, violations, grades and adjudication information for restaurants within the five boroughs of NYC.  
+									 </p>
+									 <p></p>
+									 <p>The restaurant latitude and longitude coordinates were obtained via the Google Geocoding API</p>
+							<p><span><i class="fa fa-mobile"></i></span><a href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j;" target="_blank">Link to NYC DOHMH</a></p>
+							<p><span><i class="fa fa-mobile"></i></span><a href="https://developers.google.com/maps/documentation/geocoding/start" target="_blank">Link to Google Geocoding</a></p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- end feature1 -->
+
+		<!-- start about -->
+		<section id="about">
+			<div class="overlayBottom">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">About Us</h2>
+							<p>We are a team from Atlanta, Georgia, who are enrolled in the GA Tech Data Science & Analytics Bootcamp.  Our team project was to build a website which engaged the user to explore the dataset.    Collectively, we have 63 years of experience in data analysis, SQL database management, and product management. </p>
+							<p>As we sat in class and talked about all the foods we love to eat in New York, someone said "pastrami on rye" which then led to us laughing about this project being "data on rye" </p>
+							<address></address>
+								<p><i class="fa fa-map-marker"></i> Atlanta, Georgia, United States</p>
+								<!-- <p><i class="fa fa-phone"></i> 010-010-0110 or 020-020-0220</p>
+								<p><i class="fa fa-envelope-o"></i> info@company.com</p> -->
+							</address>
+						</div>
+						<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+							<img src="static/images/pastrami.jpg" class="img-responsive" alt="feature img">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end about -->
+
+		<!-- start footer -->
+		<footer>
+			<div class="container">
+				<div class="row">
+					<p>Copyright © 2019 Bootcamp Project #2</p>
+				</div>
+			</div>
+		</footer>
+		<!-- end footer -->
+		
+		<!-- API key -->
+		<script type="text/javascript" src="static/js/config.js"></script>
+
+		<!-- jQuery CDN -->
+		<!-- This URL for the jquery script is from the HTML homework.  Using this file and NOT the jquery.js which came with the bootstrap template
+		WHY??    2.1.4 was used with HTML Homework and v1.10.2 was included with bootstrap template -->
+		  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+
+		<!--This script came with the bootstap template and is v1.10.2-->
+		<!-- <script src="js/jquery.js"></script>  -->
+		<script src="static/js/jquery.singlePageNav.min.js"></script>
+
+
+		<!--   bootstrap should be loaded AFTER jquery, else there is an error-->
+		<!--https://stackoverflow.com/questions/9529574/bootstrap-dropdown-menu-not-working-->
+
+		
+		<!-- Bootstrap CDN -->
+		<!-- <script src="js/bootstrap.min.js"></script> -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+		<script src="static/js/wow.min.js"></script>
+		
+		<script src="static/js/custom.js"></script>
+
+		
+		<!--  BEGIN Scripts used by Heat Map-->
+		<script type="text/javascript" src="static/js/heatmap.js"></script>
+		<script type="text/javascript" src="static/js/leaflet-heat.js"></script>
+		<!-- END Scripts used by the Heat Map-->
+        
+        <!--  BEGIN Scripts used by Marker Map-->
+        <script type="text/javascript" src="static/js/FarahMarkers.js"></script>
+		<script type="text/javascript" src="static/js/leaflet.extra-markers.min.js"></script>
+		<!-- END Scripts used by the Marker Map-->
+
+		<!--  BEGIN Scripts used by Graph Map-->
+		<!-- <script type="text/javascript" src="static/js/graph.js"></script> -->
+		<!--  End Scripts used by Graph Map-->
+		
+		
+	  
+	</body>
+</html>
