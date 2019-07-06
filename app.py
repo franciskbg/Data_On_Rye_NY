@@ -165,4 +165,4 @@ if __name__ == '__main__':
     print("---Columns in NYC_Health_Ratings")
     print(results)
 
-app.run(port=5001)
+app.run(debug=True)

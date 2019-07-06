@@ -1,5 +1,5 @@
 /* data route */
-var url = "http://127.0.0.1:5001/tabularData";
+var url = "http://127.0.0.1:5000/tabularData";
 console.log(url);
 
 // function buildFrappe() {

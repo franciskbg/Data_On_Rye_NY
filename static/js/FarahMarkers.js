@@ -81,7 +81,7 @@ var layers = {
 function createMarkers(response) {
 
 
-    var url = "http://127.0.0.1:5001/markerData";
+    var url = "http://127.0.0.1:5000/markerData";
     var markerColors;
     
     d3.json(url, function(response) {
@@ -109,5 +109,5 @@ function createMarkers(response) {
     createMap(L.layerGroup(restosMarkers));
   };
 
-d3.json("http://127.0.0.1:5001/markerData",createMarkers);
+d3.json("http://127.0.0.1:5000/markerData",createMarkers);
 
